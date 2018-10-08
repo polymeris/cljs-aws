@@ -37,4 +37,4 @@
   [service-name examples-file & body]
   (let [mock-fn (example-mock-fn service-name examples-file)]
     `(with-redefs [~'cljs-aws.requests/perform-request! ~mock-fn]
-       ~body)))
+       ~@body)))
