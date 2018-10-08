@@ -1,7 +1,7 @@
 (ns cljs-aws.requests
   (:require [cljs.nodejs :as nodejs]
             [cljsjs.aws-sdk-js]
-            [camel-snake-kebab.core :refer [->PascalCaseString ->kebab-case-keyword]]
+            [camel-snake-kebab.core :refer [->PascalCaseString ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [cljs.core.async :as a]))
 
@@ -19,7 +19,7 @@
   (.makeRequest (memoized-service service-name) operation-name (clj->js params) callback))
 
 (defn- prepare-params [params]
-  (transform-keys ->PascalCaseString params))
+  (transform-keys #(if (keyword? %) (->PascalCaseString %) %) params))
 
 (defn- handle-response [err data]
   (->> (if err {:error (str err)} (js->clj data))
