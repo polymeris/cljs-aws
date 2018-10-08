@@ -22,5 +22,5 @@ jobs:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "project.clj" }}
-    - run: lein doo
+    - run: lein doo once
     - run: lein cljsbuild once example

@@ -46,5 +46,5 @@ lein npm install
 The tests are ran with doo:
 
 ```
-lein doo
+lein doo once
 ```
