@@ -22,9 +22,7 @@ Use the underlying [node authentication mechanism](https://docs.aws.amazon.com/s
 
 ### Examples
 
-c.f `examples/cljs_aws/src/*.cljs`
-
-Set your AWS credentials, e.g.:
+[The `examples` directory](examples/src/cljs_aws) contains a few examples on how to use differnt AWS services. To run them, first set your AWS credentials, e.g.:
 ```
 export AWS_PROFILE=myprofile
 export AWS_REGION=us-east-1
