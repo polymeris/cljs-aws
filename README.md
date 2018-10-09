@@ -20,9 +20,9 @@ Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.asyn
 
 Use the underlying [node authentication mechanism](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
 
-### Example
+### Examples
 
-c.f `examples/cljs_aws/s3_example.cljs`
+c.f `examples/cljs_aws/src/*.cljs`
 
 Set your AWS credentials, e.g.:
 ```
@@ -31,9 +31,10 @@ export AWS_REGION=us-east-1
 ```
 Then, build and run:
 ```
+cd examples
 lein npm install
-lein cljsbuild once example
-node target/example/example.js 
+lein cljsbuild once dynamodb        # or another example
+node target/dynamodb.js 
 ```
 
 ## Development

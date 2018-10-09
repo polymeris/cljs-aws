@@ -16,11 +16,27 @@ jobs:
         - v1-dependencies-{{ checksum "project.clj" }}
         # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
-    - run: lein deps
-    - run: lein npm install
+    - run:
+        name: Download dependencies
+        command: |
+          lein deps
+          lein npm install
+    - run:
+        name: Download example dependencies
+        command: |
+          lein deps
+          lein npm install
+        working_directory: ~/repo/examples
     - save_cache:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "project.clj" }}
-    - run: lein doo once
-    - run: lein cljsbuild once example
+    - run:
+        name: Run tests
+        command: lein doo once
+    - run:
+        name: Build examples
+        command: |
+          lein cljsbuild once dynamodb
+          lein cljsbuild once s3
+        working_directory: ~/repo/examples
