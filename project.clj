@@ -18,12 +18,5 @@
                                        :output-dir    "target/test"
                                        :target        :nodejs
                                        :main          cljs-aws.test-runner
-                                       :optimizations :none}}
-                       {:id           "example"
-                        :source-paths ["examples" "src"]
-                        :compiler     {:output-to     "target/example/example.js"
-                                       :output-dir    "target/example"
-                                       :target        :nodejs
-                                       :main          cljs-aws.s3-example
-                                       :optimizations :advanced}}]}
+                                       :optimizations :none}}]}
   :doo {:build "test", :alias {:default [:node]}})
