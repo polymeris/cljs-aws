@@ -27,6 +27,6 @@
   [provider params]
   (let [provider (if (keyword? provider) (aget aws (->PascalCaseString provider)) provider)]
     (->> (transform-keys ->PascalCaseString params)
-         (cljs->js)
+         (clj->js)
          (new provider)
          (aset (config) "credentials"))))
