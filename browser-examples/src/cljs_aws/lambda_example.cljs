@@ -7,7 +7,7 @@
 (enable-console-print!)
 
 (config/set-region! "us-east-1")
-(config/set-cognito-identity! "EDIT_ME")
+(config/load-credentials! :cognito-identity-credentials {:identity-pool-id "<ADD YOUR ID HERE>"})
 
 (defn value-by-id [id]
   (-> (sel1 (str "#" id))
