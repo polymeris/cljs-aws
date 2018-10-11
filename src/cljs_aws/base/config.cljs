@@ -20,6 +20,10 @@
   [region]
   (aset (config) "region" region))
 
+(defn set-endpoint!
+  [endpoint]
+  (aset (config) "endpoint" endpoint))
+
 (defn load-credentials!
   "Load credentials from the given provider, e.g.
        (load-credentials! :shared-ini-file-credentials {:profile \"personal\"})

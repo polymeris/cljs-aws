@@ -1,13 +1,10 @@
 (ns cljs-aws.dynamodb-example
   (:require [cljs-aws.dynamodb :as db]
-            [cljs.core.async :refer [go <! timeout]]))
+            [cljs.core.async :refer [go <! timeout]]
+            [cljs-aws.examples-util :as util :refer [throw-or-print]]))
 
 
 (enable-console-print!)
-
-(defn throw-or-print [{:keys [error] :as data}]
-  (if error (throw (ex-info error nil))
-            (println data)))
 
 (def table-name "TestTable")
 
@@ -17,6 +14,7 @@
    Set your credentials before executing."
   [& args]
   (go
+    (util/override-endpoint-with-env)
     (throw-or-print (<! (db/create-table {:table-name              table-name
                                           :key-schema              [{:attribute-name "id" :key-type "HASH"}
                                                                     {:attribute-name "date" :key-type "RANGE"}]
