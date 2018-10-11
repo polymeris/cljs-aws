@@ -1,22 +1,12 @@
 (ns cljs-aws.base.requests
-  (:require [cljsjs.aws-sdk-js]
+  (:require [cljs-aws.base.config :as config]
             [camel-snake-kebab.core :refer [->PascalCaseString ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [cljs.core.async :as a]))
 
-; js/AWS for the browser, require for node
-(def ^:private aws (if (exists? js/AWS) js/AWS (js/require "aws-sdk")))
-
-(defn- raw-service
-  [service-name]
-  (new (aget aws service-name)))
-
-(def ^:private memoized-service
-  (memoize raw-service))
-
 (defn- perform-request!
   [service-name operation-name params callback]
-  (.makeRequest (memoized-service service-name) operation-name (clj->js params) callback))
+  (.makeRequest (config/service service-name) operation-name (clj->js params) callback))
 
 (defn- prepare-params [params]
   (transform-keys #(if (keyword? %) (->PascalCaseString %) %) params))
@@ -38,25 +28,3 @@
                         (a/put! ch (handle-response err data))
                         (a/close! ch)))
     ch))
-
-(defn- config []
-  (.-config aws))
-
-(defn credentials
-  "Returns the current AWS credentials"
-  []
-  (let [creds (.-credentials (config))]
-    {:access-key-id     (.-accessKeyId creds)
-     :secret-access-key (.-secretAccessKey creds)}))
-
-;; TODO more generic config/credentials handling
-
-(defn set-region!
-  [region]
-  (aset (config) "region" region))
-
-(defn set-cognito-identity!
-  [identity-pool-id]
-  (->> (clj->js {"IdentityPoolId" identity-pool-id})
-       (new (.-CognitoIdentityCredentials aws))
-       (aset (config) "credentials")))
