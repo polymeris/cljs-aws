@@ -7,6 +7,7 @@ jobs:
   build:
     docker:
     - image: circleci/clojure:lein-node-browsers-legacy
+    - image: localstack/localstack
     working_directory: ~/repo
     steps:
     - checkout
@@ -56,3 +57,16 @@ jobs:
         command: |
           lein cljsbuild once lambda
         working_directory: ~/repo/browser-examples
+    - run:
+        name: Execute Node.js examples
+        command: |
+          export AWS_REGION=us-east-1
+          export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+          export AWS_SECRET_ACCESS_KEY=je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+
+          export AWS_ENDPOINT=http://localhost:4570
+          node target/dynamodb.js
+
+          export AWS_ENDPOINT=http://localhost:4572
+          node target/s3.js
+        working_directory: ~/repo/node-examples
