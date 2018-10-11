@@ -6,67 +6,110 @@ version: 2
 jobs:
   build:
     docker:
-    - image: circleci/clojure:lein-node-browsers-legacy
-    - image: localstack/localstack
+    - image: circleci/clojure:lein-node
     working_directory: ~/repo
     steps:
     - checkout
-    # Download and cache dependencies
     - restore_cache:
         keys:
         - v1-dependencies-{{ checksum "project.clj" }}
-        # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
-    - run:
-        name: Download library dependencies
-        command: |
-          lein deps
-          lein npm install
-    - run:
-        name: Download Node.js example dependencies
-        command: |
-          lein deps
-          lein npm install
-        working_directory: ~/repo/node-examples
-    - run:
-        name: Download browser example dependencies
-        command: |
-          lein npm install
-        working_directory: ~/repo/browser-examples
+    - run: lein deps
+    - run: lein npm install
     - save_cache:
         paths:
         - ~/.m2
+        - node_modules
         key: v1-dependencies-{{ checksum "project.clj" }}
-    - run:
-        name: Run tests on Node.js
-        command: lein test-node
-    - run:
-        name: Run tests on PhantomJS
-        command: lein test-phantom
-    - run:
-        name: Install library locally
-        command: lein install
-    - run:
-        name: Build Node.js examples
-        command: |
-          lein cljsbuild once dynamodb
-          lein cljsbuild once s3
-        working_directory: ~/repo/node-examples
-    - run:
-        name: Build browser examples
-        command: |
-          lein cljsbuild once lambda
-        working_directory: ~/repo/browser-examples
-    - run:
-        name: Execute Node.js examples
-        command: |
-          export AWS_REGION=us-east-1
-          export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-          export AWS_SECRET_ACCESS_KEY=je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+    - run: lein install
+    - persist_to_workspace:
+        root: ..
+        paths:
+        - repo
+        - .m2
 
-          export AWS_ENDPOINT=http://localhost:4570
-          node target/dynamodb.js
+  unit-test-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    working_directory: ~/repo
+    steps:
+    - attach_workspace:
+        at: ..
+    - run: lein deps
+    - run: lein npm install
+    - run: lein test-node
 
-          export AWS_ENDPOINT=http://localhost:4572
-          node target/s3.js
-        working_directory: ~/repo/node-examples
+  unit-test-phantom:
+    docker:
+    - image: circleci/clojure:lein-node-browsers-legacy
+    working_directory: ~/repo
+    steps:
+    - attach_workspace:
+        at: ..
+    - run: lein deps
+    - run: lein npm install
+    - run: lein test-phantom
+
+  test-examples-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein npm install
+    - run: lein cljsbuild once dynamodb
+    - run: lein cljsbuild once s3
+    - run: AWS_ENDPOINT=http://localhost:4570 node target/dynamodb.js
+    - run: AWS_ENDPOINT=http://localhost:4572 node target/s3.js
+
+  build-examples-browser:
+    docker:
+    - image: circleci/clojure:lein-node
+    working_directory: ~/repo/browser-examples
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein npm install
+    - save_cache:
+        paths:
+        - ~/.m2
+        - node_modules
+        key: v1-dependencies-{{ checksum "project.clj" }}
+    - run: lein cljsbuild once lambda
+
+  deploy:
+    docker:
+    - image: circleci/clojure:lein-node
+    working_directory: ~/repo
+    steps:
+    - attach_workspace:
+        at: ..
+    - run: echo TODO deploy
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+    - build
+    - unit-test-node:
+        requires: [build]
+    - unit-test-phantom:
+        requires: [build]
+    - test-examples-node:
+        requires: [build]
+    - build-examples-browser:
+        requires: [build]
+    - deploy:
+        requires:
+        - unit-test-node
+        - unit-test-phantom
+        - test-examples-node
+        - build-examples-browser
