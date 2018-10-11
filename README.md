@@ -20,7 +20,10 @@ Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.asyn
 
 For node, use the underlying [node authentication mechanism](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
 
-For the browser, use a Cognito identity pool.
+For the browser, use a Cognito identity pool, and load the credentials as follows:
+```
+(config/load-credentials! :cognito-identity-credentials {:identity-pool-id "<id>"})
+```
 
 ### Examples
 
@@ -35,7 +38,7 @@ export AWS_REGION=us-east-1
 ```
 Then, build and run:
 ```
-cd examples
+cd node-examples
 lein npm install
 lein cljsbuild once dynamodb        # or another example
 node target/dynamodb.js 
@@ -47,13 +50,7 @@ To run browser examples, follow [the first step in this tutorial](https://docs.a
 to create a Cognito Identity Pool, then give the IAM role associated with unauthenticated users permissions to access the
 service you are testing.
 
-Then edit the example to use your Cognito Identity Pool ID:
-
-```
-(requests/set-cognito-identity! "EDIT_ME") ; FIXME This function will probably change!
-```
-
-Then run figwheel:
+Edit the example code to use your Cognito Identity Pool ID, and run figwheel:
 ```
 cd browser-examples
 lein npm install

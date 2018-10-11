@@ -12,7 +12,7 @@
   :cljsbuild {:builds [{:id           "dynamodb"
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
-                                       :main      cljs-aws.dynamodb
+                                       :main      cljs-aws.dynamodb-example
                                        :output-to "target/dynamodb.js"}}
                        {:id           "s3"
                         :source-paths ["src"]
