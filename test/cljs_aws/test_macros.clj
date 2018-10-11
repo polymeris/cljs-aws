@@ -33,8 +33,8 @@
          (callback# error# (~outputs operation-name#))))))
 
 (defmacro with-example-mocks
-  "Evaluate body with cljs-aws.requests/perform-request! rebound to a mock implementation based on an examples file"
+  "Evaluate body with cljs-aws.base.requests/perform-request! rebound to a mock implementation based on an examples file"
   [service-name examples-file & body]
   (let [mock-fn (example-mock-fn service-name examples-file)]
-    `(with-redefs [~'cljs-aws.requests/perform-request! ~mock-fn]
+    `(with-redefs [~'cljs-aws.base.requests/perform-request! ~mock-fn]
        ~@body)))

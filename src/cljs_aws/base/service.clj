@@ -1,4 +1,4 @@
-(ns cljs-aws.service
+(ns cljs-aws.base.service
   (:require [camel-snake-kebab.core :refer [->kebab-case-string ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [clojure.data.json :as json]))
@@ -68,7 +68,7 @@
   `(defn ~fn-sym
      ~docstring
      [params#]
-     (cljs-aws.requests/request ~service-name ~sdk-name params#)))
+     (cljs-aws.base.requests/request ~service-name ~sdk-name params#)))
 
 (defmacro defservice
   "Given a service name and a file containing API specs, generates functions corresponding to all of the

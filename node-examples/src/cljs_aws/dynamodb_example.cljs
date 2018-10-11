@@ -1,6 +1,5 @@
 (ns cljs-aws.dynamodb-example
-  (:require [cljs-aws.requests :as aws]
-            [cljs-aws.dynamodb :as db]
+  (:require [cljs-aws.dynamodb :as db]
             [cljs.core.async :refer [go <! timeout]]))
 
 
