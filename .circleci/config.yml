@@ -17,26 +17,42 @@ jobs:
         # fallback to using the latest cache if no exact match is found
         - v1-dependencies-
     - run:
-        name: Download dependencies
+        name: Download library dependencies
         command: |
           lein deps
           lein npm install
     - run:
-        name: Download example dependencies
+        name: Download Node.js example dependencies
         command: |
           lein deps
           lein npm install
-        working_directory: ~/repo/examples
+        working_directory: ~/repo/node-examples
+    - run:
+        name: Download browser example dependencies
+        command: |
+          lein npm install
+        working_directory: ~/repo/browser-examples
     - save_cache:
         paths:
         - ~/.m2
         key: v1-dependencies-{{ checksum "project.clj" }}
     - run:
-        name: Run tests
-        command: lein doo once
+        name: Run tests on Node.js
+        command: lein test-node
     - run:
-        name: Build examples
+        name: Run tests on PhantomJS
+        command: lein test-phantom
+    - run:
+        name: Install library locally
+        command: lein install
+    - run:
+        name: Build Node.js examples
         command: |
           lein cljsbuild once dynamodb
           lein cljsbuild once s3
-        working_directory: ~/repo/examples
+        working_directory: ~/repo/node-examples
+    - run:
+        name: Build browser examples
+        command: |
+          lein cljsbuild once lambda
+        working_directory: ~/repo/browser-examples

@@ -1,6 +1,6 @@
 # cljs-aws
 
-Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.async on Node.
+Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.async on Node or in the browser.
 
 ## Usage
 
@@ -18,11 +18,17 @@ Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.asyn
 
 ### Authentication
 
-Use the underlying [node authentication mechanism](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
+For node, use the underlying [node authentication mechanism](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html).
+
+For the browser, use a Cognito identity pool.
 
 ### Examples
 
-[The `examples` directory](examples/src/cljs_aws) contains a few examples on how to use differnt AWS services. To run them, first set your AWS credentials, e.g.:
+The [`node-examples`](node-examples/src/cljs_aws) and [`browser-examples`](browser-examples/src/cljs_aws) directories contains a few examples on how to use different AWS services.
+
+#### Node
+ 
+To run Node examples, first set your AWS credentials, e.g.:
 ```
 export AWS_PROFILE=myprofile
 export AWS_REGION=us-east-1
@@ -35,6 +41,25 @@ lein cljsbuild once dynamodb        # or another example
 node target/dynamodb.js 
 ```
 
+#### Browser
+
+To run browser examples, follow [the first step in this tutorial](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/getting-started-browser.html)
+to create a Cognito Identity Pool, then give the IAM role associated with unauthenticated users permissions to access the
+service you are testing.
+
+Then edit the example to use your Cognito Identity Pool ID:
+
+```
+(requests/set-cognito-identity! "EDIT_ME") ; FIXME This function will probably change!
+```
+
+Then run figwheel:
+```
+cd browser-examples
+lein npm install
+lein figwheel lambda
+```
+
 ## Development
 
 Install the AWS SDK via npm:
@@ -43,7 +68,7 @@ lein npm install
 ```
 
 The tests are ran with doo:
-
 ```
-lein doo once
+lein doo node test-node auto            # or "once"
+lein doo phantom test-browser auto
 ```

@@ -5,7 +5,8 @@
             [camel-snake-kebab.extras :refer [transform-keys]]
             [cljs.core.async :as a]))
 
-(def ^:private aws (nodejs/require "aws-sdk"))
+; js/AWS for the browser, require for node
+(def ^:private aws (if (exists? js/AWS) js/AWS (nodejs/require "aws-sdk")))
 
 (defn- raw-service
   [service-name]
@@ -48,3 +49,15 @@
   (let [creds (.-credentials (config))]
     {:access-key-id     (.-accessKeyId creds)
      :secret-access-key (.-secretAccessKey creds)}))
+
+;; TODO more generic config/credentials handling
+
+(defn set-region!
+  [region]
+  (aset (config) "region" region))
+
+(defn set-cognito-identity!
+  [identity-pool-id]
+  (->> (clj->js {"IdentityPoolId" identity-pool-id})
+       (new (.-CognitoIdentityCredentials aws))
+       (aset (config) "credentials")))
