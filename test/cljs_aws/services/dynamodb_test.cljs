@@ -1,4 +1,4 @@
-(ns cljs-aws.dynamodb-test
+(ns cljs-aws.services.dynamodb-test
   (:require [clojure.test :refer [deftest is async]]
             [camel-snake-kebab.core :refer [->camelCaseString]]
             [cljs.core.async :as a]

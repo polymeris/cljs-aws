@@ -1,5 +1,5 @@
 (ns cljs-aws.lambda-example
-  (:require [cljs-aws.requests :as requests]
+  (:require [cljs-aws.base.requests :as requests]
             [cljs-aws.lambda :as lambda]
             [cljs.core.async :refer [go <!]]
             [dommy.core :as dommy :refer-macros [sel1]]))

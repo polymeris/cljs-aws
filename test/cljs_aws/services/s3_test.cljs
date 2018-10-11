@@ -1,4 +1,4 @@
-(ns cljs-aws.s3-test
+(ns cljs-aws.services.s3-test
   (:require [clojure.test :refer [deftest is async]]
             [camel-snake-kebab.core :refer [->camelCaseString]]
             [cljs.core.async :as a]

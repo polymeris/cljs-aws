@@ -1,7 +1,7 @@
-(ns cljs-aws.requests-test
+(ns cljs-aws.base.requests-test
   (:require [clojure.test :refer [deftest is async]]
             [cljs.core.async :as a]
-            [cljs-aws.requests :as requests]))
+            [cljs-aws.base.requests :as requests]))
 
 (def test-service-name "test-service")
 (def test-operation-name "test-operation")

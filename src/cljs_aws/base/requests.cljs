@@ -1,4 +1,4 @@
-(ns cljs-aws.requests
+(ns cljs-aws.base.requests
   (:require [cljsjs.aws-sdk-js]
             [camel-snake-kebab.core :refer [->PascalCaseString ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
