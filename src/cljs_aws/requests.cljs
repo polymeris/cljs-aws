@@ -1,12 +1,11 @@
 (ns cljs-aws.requests
-  (:require [cljs.nodejs :as nodejs]
-            [cljsjs.aws-sdk-js]
+  (:require [cljsjs.aws-sdk-js]
             [camel-snake-kebab.core :refer [->PascalCaseString ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [cljs.core.async :as a]))
 
 ; js/AWS for the browser, require for node
-(def ^:private aws (if (exists? js/AWS) js/AWS (nodejs/require "aws-sdk")))
+(def ^:private aws (if (exists? js/AWS) js/AWS (js/require "aws-sdk")))
 
 (defn- raw-service
   [service-name]
