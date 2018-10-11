@@ -1,4 +1,4 @@
-(defproject cljs-aws "0.1.0-SNAPSHOT"
+(defproject cljs-aws :lein-v
   :description "Unofficial AWS client for Clojurescript"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
@@ -8,9 +8,14 @@
                  [org.clojure/data.json "0.2.6"]
                  [camel-snake-kebab "0.4.0"]
                  [cljsjs/aws-sdk-js "2.94.0-0"]]
+  :deploy-repositories [["clojars" {:url           "https://clojars.org/repo"
+                                    :username      :env/clojars_username
+                                    :password      :env/clojars_password
+                                    :sign-releases false}]]
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-npm "0.6.2"]
-            [lein-doo "0.1.10"]]
+            [lein-doo "0.1.10"]
+            [com.roomkey/lein-v "6.3.0"]]
   :npm {:dependencies [[aws-sdk "2.94.0"]]}
   :aliases {"test-node"    ["doo" "node" "test-node" "once"]
             "test-phantom" ["doo" "phantom" "test-browser" "once"]}

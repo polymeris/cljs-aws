@@ -21,6 +21,7 @@ jobs:
         - ~/.m2
         - node_modules
         key: v1-dependencies-{{ checksum "project.clj" }}
+    - run: lein v
     - run: lein install
     - persist_to_workspace:
         root: ..
@@ -92,7 +93,7 @@ jobs:
     steps:
     - attach_workspace:
         at: ..
-    - run: echo TODO deploy
+    - run: lein deploy clojars
 
 workflows:
   version: 2
@@ -108,6 +109,9 @@ workflows:
     - build-examples-browser:
         requires: [build]
     - deploy:
+        filters:
+          branches:
+            only: [master]
         requires:
         - unit-test-node
         - unit-test-phantom
