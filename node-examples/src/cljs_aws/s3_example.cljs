@@ -17,10 +17,11 @@
                                 :buckets
                                 (first)
                                 :name)
-          object-keys (->> (<! (s3/list-objects-v2 {:bucket first-bucket-name}))
-                           (throw-or-print)
-                           :contents
-                           (map :key))]
+          object-keys (when first-bucket-name
+                        (->> (<! (s3/list-objects-v2 {:bucket first-bucket-name}))
+                             (throw-or-print)
+                             :contents
+                             (map :key)))]
       (println "KEYS:" object-keys))))
 
 (set! *main-cli-fn* -main)
