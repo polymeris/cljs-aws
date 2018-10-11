@@ -1,13 +1,13 @@
 (ns cljs-aws.lambda-example
-  (:require [cljs-aws.base.requests :as requests]
+  (:require [cljs-aws.base.config :as config]
             [cljs-aws.lambda :as lambda]
             [cljs.core.async :refer [go <!]]
             [dommy.core :as dommy :refer-macros [sel1]]))
 
 (enable-console-print!)
 
-(requests/set-region! "us-east-1")
-(requests/set-cognito-identity! "EDIT_ME")
+(config/set-region! "us-east-1")
+(config/set-cognito-identity! "EDIT_ME")
 
 (defn value-by-id [id]
   (-> (sel1 (str "#" id))
