@@ -2,6 +2,9 @@
 
 Unofficial, experimental, pre-alpha AWS client for Clojurescript using core.async on Node or in the browser.
 
+[![Clojars](https://img.shields.io/clojars/v/cljs-aws.svg?style=flat)](https://clojars.org/cljs-aws)
+[![CircleCI](https://circleci.com/gh/polymeris/cljs-aws.svg?style=svg)](https://circleci.com/gh/polymeris/cljs-aws)
+
 ## Usage
 
 ```clojure
