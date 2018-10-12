@@ -91,8 +91,7 @@ jobs:
     - image: circleci/clojure:lein-node
     working_directory: ~/repo
     steps:
-    - attach_workspace:
-        at: ..
+    - checkout
     - run: lein deploy clojars
 
 workflows:
