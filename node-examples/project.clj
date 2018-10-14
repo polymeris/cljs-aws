@@ -13,7 +13,12 @@
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
   :npm {:dependencies [[aws-sdk "2.94.0"]]}
-  :cljsbuild {:builds [{:id           "dynamodb"
+  :cljsbuild {:builds [{:id           "cloudwatch"
+                        :source-paths ["src"]
+                        :compiler     {:target    :nodejs
+                                       :main      cljs-aws.cloudwatch-example
+                                       :output-to "target/cloudwatch.js"}}
+                       {:id           "dynamodb"
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
                                        :main      cljs-aws.dynamodb-example
