@@ -23,6 +23,11 @@
                         :compiler     {:target    :nodejs
                                        :main      cljs-aws.dynamodb-example
                                        :output-to "target/dynamodb.js"}}
+                       {:id           "kinesis"
+                        :source-paths ["src"]
+                        :compiler     {:target    :nodejs
+                                       :main      cljs-aws.kinesis-example
+                                       :output-to "target/kinesis.js"}}
                        {:id           "s3"
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
