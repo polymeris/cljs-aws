@@ -68,7 +68,7 @@ jobs:
     - run: lein cljsbuild once cloudwatch
     - run: lein cljsbuild once dynamodb
     - run: lein cljsbuild once kinesis
-    #- run: lein cljsbuild once route53
+    - run: lein cljsbuild once route-53
     - run: lein cljsbuild once s3
     #- run: lein cljsbuild once sns
     #- run: lein cljsbuild once sqs
@@ -76,7 +76,7 @@ jobs:
     #- run: AWS_ENDPOINT=http://localhost:4582 node target/cloudwatch.js
     - run: AWS_ENDPOINT=http://localhost:4570 node target/dynamodb.js
     - run: AWS_ENDPOINT=http://localhost:4568 node target/kinesis.js
-    #- run: AWS_ENDPOINT=http://localhost:4580 node target/route53.js
+    - run: AWS_ENDPOINT=http://localhost:4580 node target/route-53.js
     - run: AWS_ENDPOINT=http://localhost:4572 node target/s3.js
     #- run: AWS_ENDPOINT=http://localhost:4575 node target/sns.js
     #- run: AWS_ENDPOINT=http://localhost:4576 node target/sqs.js
