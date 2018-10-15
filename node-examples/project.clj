@@ -37,4 +37,9 @@
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
                                        :main      cljs-aws.s3-example
-                                       :output-to "target/s3.js"}}]})
+                                       :output-to "target/s3.js"}}
+                       {:id           "sns"
+                        :source-paths ["src"]
+                        :compiler     {:target    :nodejs
+                                       :main      cljs-aws.sns-example
+                                       :output-to "target/sns.js"}}]})
