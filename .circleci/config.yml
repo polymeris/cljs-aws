@@ -120,8 +120,8 @@ workflows:
         requires: [build]
     - deploy:
         filters:
-          branches:
-            only: [master]
+          tags:
+            only: /^v.*/
         requires:
         - unit-test-node
         - unit-test-phantom
