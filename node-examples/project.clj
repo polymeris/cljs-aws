@@ -28,6 +28,11 @@
                         :compiler     {:target    :nodejs
                                        :main      cljs-aws.kinesis-example
                                        :output-to "target/kinesis.js"}}
+                       {:id           "route-53"
+                        :source-paths ["src"]
+                        :compiler     {:target    :nodejs
+                                       :main      cljs-aws.route-53-example
+                                       :output-to "target/route-53.js"}}
                        {:id           "s3"
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
