@@ -64,7 +64,6 @@ jobs:
     - attach_workspace:
         at: ../..
     - run: lein deps
-    - run: lein npm install
     - run: lein cljsbuild once cloudwatch
     - run: lein cljsbuild once dynamodb
     - run: lein cljsbuild once kinesis
@@ -89,7 +88,6 @@ jobs:
     - attach_workspace:
         at: ../..
     - run: lein deps
-    - run: lein npm install
     - save_cache:
         paths:
         - ~/.m2
