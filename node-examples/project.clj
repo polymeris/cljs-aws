@@ -42,4 +42,9 @@
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs
                                        :main      cljs-aws.sns-example
-                                       :output-to "target/sns.js"}}]})
+                                       :output-to "target/sns.js"}}
+                       {:id           "sqs"
+                        :source-paths ["src"]
+                        :compiler     {:target    :nodejs
+                                       :main      cljs-aws.sqs-example
+                                       :output-to "target/sqs.js"}}]})
