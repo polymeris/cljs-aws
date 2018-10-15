@@ -7,12 +7,10 @@
                  [org.clojure/core.async "0.4.474"]
                  [cljs-aws nil]]
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-npm "0.6.2"]
             [com.roomkey/lein-v "6.3.0"]]
   :middleware [leiningen.v/version-from-scm
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
-  :npm {:dependencies [[aws-sdk "2.94.0"]]}
   :cljsbuild {:builds [{:id           "cloudwatch"
                         :source-paths ["src"]
                         :compiler     {:target    :nodejs

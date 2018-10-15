@@ -9,12 +9,10 @@
                  [cljs-aws nil]]
   :plugins [[lein-figwheel "0.5.16"]
             [lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
-            [lein-npm "0.6.2"]
             [com.roomkey/lein-v "6.3.0"]]
   :middleware [leiningen.v/version-from-scm
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
-  :npm {:dependencies [[aws-sdk "2.94.0"]]}
   :clean-targets ^{:protect false} ["resources/public/js/compiled"]
   :cljsbuild {:builds
               [{:id           "lambda"

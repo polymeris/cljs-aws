@@ -9,6 +9,6 @@ pom.xml.asc
 .nrepl-port
 figwheel_server.log
 /browser-examples/resources/public/js/compiled
-node_modules
+/node_modules
 *.iml
 /.idea

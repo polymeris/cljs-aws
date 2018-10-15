@@ -1,7 +1,8 @@
 (ns cljs-aws.base.service
   (:require [camel-snake-kebab.core :refer [->kebab-case-string ->kebab-case-keyword ->camelCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.java.io :as io]))
 
 (defn- sdk-operation-name
   [operation-name]
@@ -56,7 +57,8 @@
    E.g, for `AWS.CodeCommit`:
        (service-operations \"CodeCommit\" \"codecommit-2015-04-13.min.json\")"
   [service-name api-file]
-  (as-> (str "node_modules/aws-sdk/apis/" api-file) $
+  (as-> api-file $
+        (io/resource $)
         (slurp $)
         (json/read-str $)
         (transform-keys ->kebab-case-keyword $)

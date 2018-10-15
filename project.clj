@@ -17,6 +17,7 @@
             [lein-doo "0.1.10"]
             [com.roomkey/lein-v "6.3.0"]]
   :npm {:dependencies [[aws-sdk "2.94.0"]]}
+  :resource-paths ["node_modules/aws-sdk/apis"]
   :aliases {"test-node"    ["doo" "node" "test-node" "once"]
             "test-phantom" ["doo" "phantom" "test-browser" "once"]}
   :cljsbuild {:builds [{:id           "test-node"

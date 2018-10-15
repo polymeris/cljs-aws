@@ -47,7 +47,6 @@ export AWS_REGION=us-east-1
 Then, build and run:
 ```
 cd node-examples
-lein npm install
 lein cljsbuild once dynamodb        # or another example
 node target/dynamodb.js 
 ```
@@ -61,7 +60,6 @@ service you are testing.
 Edit the example code to use your Cognito Identity Pool ID, and run figwheel:
 ```
 cd browser-examples
-lein npm install
 lein figwheel lambda
 ```
 
