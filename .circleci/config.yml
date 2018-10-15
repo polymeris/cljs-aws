@@ -109,19 +109,22 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-    - build
+    - build:
+        filters: {tags: {only: "/.*/"}}
     - unit-test-node:
         requires: [build]
+        filters: {tags: {only: "/.*/"}}
     - unit-test-phantom:
         requires: [build]
+        filters: {tags: {only: "/.*/"}}
     - test-examples-node:
         requires: [build]
+        filters: {tags: {only: "/.*/"}}
     - build-examples-browser:
         requires: [build]
+        filters: {tags: {only: "/.*/"}}
     - deploy:
-        filters:
-          tags:
-            only: /^v.*/
+        filters: {tags: {only: "/v.*/"}}
         requires:
         - unit-test-node
         - unit-test-phantom
