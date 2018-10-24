@@ -101,9 +101,9 @@
   (is (some? (config/service "S3"))))
 
 (deftest valid--set-region--ok
-  (is (some? (config/set-region! "us-east-1"))))
+  (is (nil? (config/set-region! "us-east-1"))))
 
 (deftest valid--load-credentials--ok
-  (is (some? (config/load-credentials! :web-identity-credentials {:identity-pool-id "foo"})))
-  (is (some? (config/load-credentials! :cognito-identity-credentials {:role-arn           "bar"
+  (is (nil? (config/load-credentials! :web-identity-credentials {:identity-pool-id "foo"})))
+  (is (nil? (config/load-credentials! :cognito-identity-credentials {:role-arn            "bar"
                                                                       :web-identity-token "baz"}))))

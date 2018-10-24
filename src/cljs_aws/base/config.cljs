@@ -1,5 +1,5 @@
 (ns cljs-aws.base.config
-  (:require [cljsjs.aws-sdk-js]
+  (:require [aws-sdk]
             [camel-snake-kebab.core :refer [->PascalCaseString]]
             [camel-snake-kebab.extras :refer [transform-keys]]))
 
@@ -13,16 +13,17 @@
 (def service
   (memoize raw-service))
 
-(defn- config []
-  (.-config aws))
+(defn- update-config! [key value]
+  (.update (aget aws "config")
+           (clj->js {key value})))
 
 (defn set-region!
   [region]
-  (aset (config) "region" region))
+  (update-config! "region" region))
 
 (defn set-endpoint!
   [endpoint]
-  (aset (config) "endpoint" endpoint))
+  (update-config! "endpoint" endpoint))
 
 (defn load-credentials!
   "Load credentials from the given provider, e.g.
@@ -33,4 +34,4 @@
     (->> (transform-keys ->PascalCaseString params)
          (clj->js)
          (new provider)
-         (aset (config) "credentials"))))
+         (update-config! "credentials"))))
