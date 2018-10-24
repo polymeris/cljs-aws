@@ -1,8 +1,9 @@
 (ns cljs-aws.examples-util
-  (:require [cljs-aws.base.config :as config]))
+  (:require [cljs.nodejs :as nodejs]
+            [cljs-aws.base.config :as config]))
 
 (defn override-endpoint-with-env []
-  (when-let [env (aget js/process.env "AWS_ENDPOINT")]
+  (when-let [env (aget js/process "env" "AWS_ENDPOINT")]
     (println "Using endpoint" env)
     (config/set-endpoint! env)))
 

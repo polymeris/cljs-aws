@@ -95,3 +95,13 @@ The tests are ran with doo:
 lein doo node test-node auto            # or "once"
 lein doo phantom test-browser auto
 ```
+
+If you have modified the root library and try to run the examples you will get an error similar to
+`Could not find artifact cljs-aws:cljs-aws:jar:x.y.z-DIRTY in central`, since the modified version does not exist
+in the maven repositories. Install a local copy of the library by running:
+```
+lein install
+```
+
+Deployment to clojars is handled by the CI/CD pipeline, and, if the tests pass, will run for any git tag starting with
+`v`.

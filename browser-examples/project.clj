@@ -1,3 +1,16 @@
+(def aws-sdk-version "2.94.0")
+
+(defn cljsbuild-example [example-name]
+  {:id           "lambda"
+   :source-paths ["src"]
+   :figwheel     {:open-urls ["http://localhost:3449/" example-name ".html"]}
+   :compiler     {:main         (symbol (str "cljs-aws." example-name "-example"))
+                  :asset-path   "js/compiled/out"
+                  :output-to    (str "resources/public/js/compiled/out/" example-name "-example.js")
+                  :output-dir   "resources/public/js/compiled/out"
+                  :foreign-libs [{:file     (str "https://sdk.amazonaws.com/js/aws-sdk-" aws-sdk-version ".js")
+                                  :provides ["aws-sdk"]}]}})
+
 (defproject cljs-aws-browser-examples :lein-v
   :description "Browser examples for cljs-aws"
   :license {:name "Eclipse Public License"
@@ -14,11 +27,5 @@
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
   :clean-targets ^{:protect false} ["resources/public/js/compiled"]
-  :cljsbuild {:builds
-              [{:id           "lambda"
-                :source-paths ["src"]
-                :figwheel     {:open-urls ["http://localhost:3449/lambda.html"]}
-                :compiler     {:main       cljs-aws.lambda-example
-                               :asset-path "js/compiled/out"
-                               :output-to  "resources/public/js/compiled/out/lambda-example.js"
-                               :output-dir "resources/public/js/compiled/out"}}]})
+  :cljsbuild {:builds ~(map cljsbuild-example
+                         ["lambda"])})

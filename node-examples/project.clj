@@ -1,3 +1,11 @@
+(defn cljsbuild-example [example-name]
+  {:id           example-name
+   :source-paths ["src"]
+   :compiler     {:main          (symbol (str "cljs-aws." example-name "-example"))
+                  :output-to     (str "target/" example-name ".js")
+                  :target        :nodejs
+                  :optimizations :advanced}})
+
 (defproject cljs-aws-node-examples :lein-v
   :description "Node examples for cljs-aws"
   :license {:name "Eclipse Public License"
@@ -11,38 +19,11 @@
   :middleware [leiningen.v/version-from-scm
                leiningen.v/dependency-version-from-scm
                leiningen.v/add-workspace-data]
-  :cljsbuild {:builds [{:id           "cloudwatch"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.cloudwatch-example
-                                       :output-to "target/cloudwatch.js"}}
-                       {:id           "dynamodb"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.dynamodb-example
-                                       :output-to "target/dynamodb.js"}}
-                       {:id           "kinesis"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.kinesis-example
-                                       :output-to "target/kinesis.js"}}
-                       {:id           "route-53"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.route-53-example
-                                       :output-to "target/route-53.js"}}
-                       {:id           "s3"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.s3-example
-                                       :output-to "target/s3.js"}}
-                       {:id           "sns"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.sns-example
-                                       :output-to "target/sns.js"}}
-                       {:id           "sqs"
-                        :source-paths ["src"]
-                        :compiler     {:target    :nodejs
-                                       :main      cljs-aws.sqs-example
-                                       :output-to "target/sqs.js"}}]})
+  :cljsbuild {:builds ~(map cljsbuild-example
+                         ["cloudwatch"
+                          "dynamodb"
+                          "kinesis"
+                          "route-53"
+                          "s3"
+                          "sns"
+                          "sqs"])})
