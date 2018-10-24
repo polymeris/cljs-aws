@@ -1,4 +1,4 @@
-(def aws-sdk-version "2.94.0")
+(def aws-sdk-version "2.341.0")
 
 (def browser-aws-sdk-basepath
   (str "https://sdk.amazonaws.com/js/aws-sdk-" aws-sdk-version))
