@@ -3,7 +3,7 @@
 (defn cljsbuild-example [example-name]
   {:id           "lambda"
    :source-paths ["src"]
-   :figwheel     {:open-urls ["http://localhost:3449/" example-name ".html"]}
+   :figwheel     {:open-urls [(str "http://localhost:3449/" example-name ".html")]}
    :compiler     {:main         (symbol (str "cljs-aws." example-name "-example"))
                   :asset-path   "js/compiled/out"
                   :output-to    (str "resources/public/js/compiled/out/" example-name "-example.js")

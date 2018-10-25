@@ -100,6 +100,7 @@ If you have modified the root library and try to run the examples you will get a
 `Could not find artifact cljs-aws:cljs-aws:jar:x.y.z-DIRTY in central`, since the modified version does not exist
 in the maven repositories. Install a local copy of the library by running:
 ```
+lein download-deps
 lein install
 ```
 
