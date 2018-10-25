@@ -9,8 +9,8 @@ Tested and working, but still to be considered in **alpha** stage, any interface
 
 ## Usage
 
-[API Reference at cljdoc](https://cljdoc.org/d/cljs-aws/cljs-aws/CURRENT/api/cljs-aws)|
---------------------------------------------------------------------------------------|
+[:book: API Reference at cljdoc](https://cljdoc.org/d/cljs-aws/cljs-aws/CURRENT/api/cljs-aws)|
+-----------------------------------------------------------------------------------|
 
 ```clojure
 (ns example
@@ -33,7 +33,7 @@ and `AWS_SECRET_ACCESS_KEY`.
 
 For the browser, use a Cognito identity pool, and load the credentials as follows:
 ```clojure
-(config/load-credentials! :cognito-identity-credentials {:identity-pool-id "<id>"})
+(aws-cljs.base.config/load-credentials! :cognito-identity-credentials {:identity-pool-id "<id>"})
 ```
 
 ### Examples

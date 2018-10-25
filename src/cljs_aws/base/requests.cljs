@@ -17,6 +17,7 @@
 
 (defn request
   "Perform a request to AWS services.
+
    Returns a core.async channel, on which the result will be put, or `{:error \"message\"}`
    on error"
   [service-name operation-name params]
