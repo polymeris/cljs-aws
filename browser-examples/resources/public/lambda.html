@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bare-css@2.0.3/css/bare.min.css">
+    <script src="js/compiled/out/lambda-example.js" type="text/javascript"></script>
+</head>
 <body>
-<script src="js/compiled/out/lambda-example.js" type="text/javascript"></script>
-<div>
-    <b>Function name:</b>
-    <input id="function-name">
-</div>
-<div>
-    <b>Payload</b>
-    <textarea id="payload"></textarea>
-</div>
-<button onclick="cljs_aws.lambda_example.invoke_function()">Invoke</button>
-<p id="output"></p>
+<section>
+    <h1>Lambda example</h1>
+    <form>
+        <fieldset>
+            <label for="function-name">Function name</label>
+            <input id="function-name">
+            <label for="payload">Payload</label>
+            <textarea id="payload"></textarea>
+            <button primary
+                    onclick="event.preventDefault();cljs_aws.lambda_example.invoke_function()">
+                Invoke
+            </button>
+            <b id="output"></b>
+        </fieldset>
+    </form>
+</section>
 </body>
 </html>
