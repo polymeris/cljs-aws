@@ -48,7 +48,7 @@ jobs:
     - run: lein deps
     - run: lein test-phantom
 
-  test-examples-node:
+  test-cloudwatch-node:
     docker:
     - image: circleci/clojure:lein-node
     - image: localstack/localstack
@@ -57,27 +57,118 @@ jobs:
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
       AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4582
     steps:
     - attach_workspace:
         at: ../..
     - run: lein deps
     - run: lein cljsbuild once cloudwatch
-    - run: lein cljsbuild once dynamodb
-    - run: lein cljsbuild once kinesis
-    - run: lein cljsbuild once route-53
-    - run: lein cljsbuild once s3
-    - run: lein cljsbuild once sns
-    - run: lein cljsbuild once sqs
-    # Not running CloudWatch example, because localstack 500's
-    #- run: AWS_ENDPOINT=http://localhost:4582 node target/cloudwatch.js
-    - run: AWS_ENDPOINT=http://localhost:4570 node target/dynamodb.js
-    - run: AWS_ENDPOINT=http://localhost:4568 node target/kinesis.js
-    - run: AWS_ENDPOINT=http://localhost:4580 node target/route-53.js
-    - run: AWS_ENDPOINT=http://localhost:4572 node target/s3.js
-    - run: AWS_ENDPOINT=http://localhost:4575 node target/sns.js
-    - run: AWS_ENDPOINT=http://localhost:4576 node target/sqs.js
+  #      Localstack's cloudwatch 500s
+  #    - run: node target/cloudwatch.js
 
-  build-examples-browser:
+  test-dynamodb-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4570
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once dynamodb
+    - run: node target/dynamodb.js
+
+  test-kinesis-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4568
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once kinesis
+    - run: node target/kinesis.js
+
+  test-route-53-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4580
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once route-53
+    - run: node target/route-53.js
+
+  test-s3-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4572
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once s3
+    - run: node target/s3.js
+
+  test-sns-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4575
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once sns
+    - run: node target/sns.js
+
+  test-sqs-node:
+    docker:
+    - image: circleci/clojure:lein-node
+    - image: localstack/localstack
+    working_directory: ~/repo/node-examples
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+      AWS_ENDPOINT: http://localhost:4576
+    steps:
+    - attach_workspace:
+        at: ../..
+    - run: lein deps
+    - run: lein cljsbuild once sqs
+    - run: node target/sqs.js
+
+  build-lambda-browser:
     docker:
     - image: circleci/clojure:lein-node
     working_directory: ~/repo/browser-examples
@@ -100,20 +191,17 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-    - build:
-        filters: {tags: {only: "/.*/"}}
-    - unit-test-node:
-        requires: [build]
-        filters: {tags: {only: "/.*/"}}
-    - unit-test-phantom:
-        requires: [build]
-        filters: {tags: {only: "/.*/"}}
-    - test-examples-node:
-        requires: [build]
-        filters: {tags: {only: "/.*/"}}
-    - build-examples-browser:
-        requires: [build]
-        filters: {tags: {only: "/.*/"}}
+    - build: {filters: {tags: {only: "/.*/"}}}
+    - unit-test-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - unit-test-phantom: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-cloudwatch-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-dynamodb-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-kinesis-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-route-53-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-s3-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-sns-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - test-sqs-node: {requires: [build], filters: {tags: {only: "/.*/"}}}
+    - build-lambda-browser: {requires: [build], filters: {tags: {only: "/.*/"}}}
     - deploy:
         filters:
           tags: {only: "/v.*/"}
@@ -121,5 +209,11 @@ workflows:
         requires:
         - unit-test-node
         - unit-test-phantom
-        - test-examples-node
-        - build-examples-browser
+        - test-cloudwatch-node
+        - test-dynamodb-node
+        - test-kinesis-node
+        - test-route-53-node
+        - test-s3-node
+        - test-sns-node
+        - test-sqs-node
+        - build-lambda-browser
