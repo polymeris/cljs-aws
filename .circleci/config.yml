@@ -185,6 +185,7 @@ jobs:
     steps:
     - checkout
     - run: lein download-deps
+    - run: lein clean
     - run: lein deploy clojars
 
 workflows:
