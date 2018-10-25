@@ -9,6 +9,9 @@ Tested and working, but still to be considered in **alpha** stage, any interface
 
 ## Usage
 
+[API Reference at cljdoc](https://cljdoc.org/d/cljs-aws/cljs-aws/CURRENT/api/cljs-aws)|
+--------------------------------------------------------------------------------------|
+
 ```clojure
 (ns example
   (:require [cljs.core.async :refer [go <!]]
