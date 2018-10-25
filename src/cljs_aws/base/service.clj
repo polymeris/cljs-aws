@@ -15,14 +15,19 @@
       (clojure.string/replace #"-v-(\d+)$" (fn [[_ v]] (str "-v" v))) ; replace -v-2 endings with -v2
       (symbol)))
 
+(defn- required-input-params
+  [operation]
+  (->> (:input operation)
+       (:required)
+       (map ->kebab-case-keyword)
+       (set)))
+
 (defn- doc-params
   [operation what]
   (let [params (-> operation what)
-        required (->> (:required params)
-                      (map ->kebab-case-keyword)
-                      (set))
+        required (if (= :input what) (required-input-params operation) #{})
         member-strings (->> params :members keys sort
-                            (map #(str % (if (required %) " †"))))
+                            (map #(str "`" % "`" (if (required %) "†"))))
         member-strings (if (empty? member-strings) ["(none)"] member-strings)]
     (clojure.string/join ", " member-strings)))
 
@@ -36,11 +41,12 @@
 
 (defn- docstring
   [operation]
-  (str "Parameters\n "
-       (doc-params operation :input) "\n"
-       "Outputs\n "
-       (doc-params operation :output) "\n"
-       (:doc-url operation)))
+  (str "__Parameters__\n"
+       (doc-params operation :input) "\n\n"
+       "__Returns__\n"
+       (doc-params operation :output) "\n\n"
+       (:doc-url operation)
+       (when-not (empty? (required-input-params operation)) "\n\n† _required_")))
 
 (defn- operation-data
   [service-name [operation-name operation]]
@@ -52,10 +58,14 @@
     (assoc operation :docstring (docstring operation))))
 
 (defn service-operations
-  "Given a service name corresponding to the name of the property of `AWS` and a file containing API specs,
+  "List a given service's operations.
+
+   Given a service name corresponding to the name of the property of `AWS` and a file containing API specs,
    returns a list of operations.
    E.g, for `AWS.CodeCommit`:
-       (service-operations \"CodeCommit\" \"codecommit-2015-04-13.min.json\")"
+   ```
+   (service-operations \"CodeCommit\" \"codecommit-2015-04-13.min.json\")
+   ```"
   [service-name api-file]
   (as-> api-file $
         (io/resource $)
@@ -73,13 +83,22 @@
      (cljs-aws.base.requests/request ~service-name ~sdk-name params#)))
 
 (defmacro defservice
-  "Given a service name and a file containing API specs, generates functions corresponding to all of the
+  "Define service's functions.
+
+   Given a service name and a file containing API specs, generates functions corresponding to all of the
    service's operations.
    E.g, for `AWS.S3`:
-       (defservice \"S3\" \"s3-2006-03-01.min.json\")
+   ```
+   (defservice \"S3\" \"s3-2006-03-01.min.json\")
+   ```
+
    Generates functions like:
-       (list-buckets params)
-       (put-object params)
+   ```
+   (list-buckets params)
+   (put-object params)
+   ; ...
+   ```
+
    These functions all take a map as params and return an async channel, into which the result is put, if successful.
    In case of error, a `{:error \"message\"}` map is put, instead."
   [service-name api-file]
