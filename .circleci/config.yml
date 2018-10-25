@@ -93,6 +93,7 @@ jobs:
     working_directory: ~/repo
     steps:
     - checkout
+    - run: lein download-deps
     - run: lein deploy clojars
 
 workflows:
